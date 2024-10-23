@@ -13,7 +13,7 @@ import './App.css';
 
 // Функция для загрузки всех JSON-файлов из папки /public/data/
 const loadAllCardsFromDataFolder = async () => {
-    const filenames = ['cardsData_Tema1_full.json', 'tema2.json', '2_1.json']; // Добавьте все файлы, которые хотите загрузить
+    const filenames = ['cardsData_Tema1_full.json', 'tema2.json', '2_1.json', 'all.json']; // Добавьте все файлы, которые хотите загрузить
     let allCards = [];
 
     // Асинхронно загружаем каждый файл
