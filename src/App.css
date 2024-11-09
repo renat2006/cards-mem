@@ -1,14 +1,55 @@
+/* App.css */
+
+/* 1. CSS-переменные для Тем */
+:root {
+  --color-background-light: #ffffff;
+  --color-text-light: #000000;
+  --color-background-dark: #121212;
+  --color-text-dark: #ffffff;
+  --color-primary: #1976d2;
+  --color-secondary: #dc004e;
+  --color-border-light: #e0e0e0;
+  --color-border-dark: #333333;
+  --color-card-background-light: rgba(0, 0, 0, 0.05);
+  --color-card-background-dark: rgba(255, 255, 255, 0.1);
+  --color-card-border-light: rgba(0, 0, 0, 0.3);
+  --color-card-border-dark: rgba(255, 255, 255, 0.3);
+}
+
+/* Классы Тем */
+body.light {
+  background-color: var(--color-background-light);
+  color: var(--color-text-light);
+}
+
+body.dark {
+  background-color: var(--color-background-dark);
+  color: var(--color-text-dark);
+}
+
+/* Основные Стили */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 .app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  padding: 20px;
 }
 
+/* Контейнеры */
 .cards-container {
   display: flex;
   justify-content: center;
   padding-top: 20px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .test-mode {
@@ -16,23 +57,161 @@
   text-align: center;
 }
 
-.card {
-  transition: transform 0.3s ease;
+/* Flip Card */
+.flip-card {
+  perspective: 1000px;
 }
 
-body {
-  background-color: black;
-  color: white;
-  font-family: 'Roboto', sans-serif;
+.flip-card-inner {
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  position: relative;
 }
 
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Карточки */
+.card,
 .test-question-card {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
+  background-color: var(--color-card-background-light);
+  color: var(--color-text-light);
   border-radius: 20px;
   max-width: 400px;
   margin: 20px auto;
+  padding: 20px;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--color-card-border-light);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+body.dark .card,
+body.dark .test-question-card {
+  background-color: var(--color-card-background-dark);
+  color: var(--color-text-dark);
+  border: 1px solid var(--color-card-border-dark);
+}
+
+.card:hover,
+.test-question-card:hover {
+  transform: scale(1.02);
+}
+
+/* Кнопки */
+button,
+.MuiButton-root {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover,
+.MuiButton-root:hover {
+  opacity: 0.9;
+}
+
+button:active,
+.MuiButton-root:active {
+  transform: scale(0.98);
+}
+
+/* Формы и Поля Ввода */
+input,
+.MuiInputBase-root,
+.MuiSelect-root,
+.MuiTextField-root {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+input::placeholder,
+.MuiInputLabel-root {
+  color: inherit;
+}
+
+body.light input,
+body.light .MuiInputBase-input,
+body.light .MuiSelect-select,
+body.light .MuiTextField-root {
+  background-color: #ffffff;
+  color: var(--color-text-light);
+  border: 1px solid var(--color-border-light);
+}
+
+body.dark input,
+body.dark .MuiInputBase-input,
+body.dark .MuiSelect-select,
+body.dark .MuiTextField-root {
+  background-color: #1e1e1e;
+  color: var(--color-text-dark);
+  border: 1px solid var(--color-border-dark);
+}
+
+input:focus,
+.MuiInputBase-root:focus,
+.MuiSelect-root:focus,
+.MuiTextField-root:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* Заголовки и Тексты */
+h1, h2, h3, h4, h5, h6,
+.MuiTypography-h1,
+.MuiTypography-h2,
+.MuiTypography-h3,
+.MuiTypography-h4,
+.MuiTypography-h5,
+.MuiTypography-h6 {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+}
+
+p,
+.MuiTypography-body1,
+.MuiTypography-body2 {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+}
+
+/* Навигация и Меню */
+nav,
+.MuiButton-root,
+.MuiIconButton-root {
+  color: inherit;
+}
+
+/* Медиа-запросы для Адаптивности */
+@media (max-width: 768px) {
+  .cards-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .flip-card {
+    width: 90%;
+    height: auto;
+  }
+
+  .card,
+  .test-question-card {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-container {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .card,
+  .test-question-card {
+    padding: 15px;
+  }
+
+  .flip-card {
+    width: 100%;
+    height: auto;
+  }
 }

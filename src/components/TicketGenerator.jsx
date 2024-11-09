@@ -1,10 +1,18 @@
+// src/components/TicketGenerator.jsx
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, Paper, Grid, IconButton } from '@mui/material';
+import {
+    Box,
+    Button,
+    Typography,
+    Paper,
+    Grid,
+    IconButton
+} from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { Link } from 'react-router-dom';
 
-const TicketGenerator = ({ cards, theme, toggleTheme }) => {
+const TicketGenerator = ({ cards, themeMode, toggleTheme }) => {
     const [ticket, setTicket] = useState([]);
 
     // Загрузка билета из localStorage при монтировании компонента
@@ -41,25 +49,67 @@ const TicketGenerator = ({ cards, theme, toggleTheme }) => {
         localStorage.setItem('examTicket', JSON.stringify(generatedTicket));
     };
 
+    // Функция для сброса билета
+    const resetTicket = () => {
+        setTicket([]);
+        localStorage.removeItem('examTicket');
+    };
+
     return (
-        <Box sx={{ bgcolor: theme === 'light' ? '#f5f5f5' : 'black', minHeight: '100vh', padding: '20px', color: theme === 'light' ? '#333' : 'white' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <Typography variant="h2" gutterBottom align="center" sx={{ color: theme === 'light' ? '#333' : 'white' }}>
+        <Box
+            sx={{
+                bgcolor: themeMode === 'light' ? '#f5f5f5' : 'black',
+                minHeight: '100vh',
+                padding: '20px',
+                color: themeMode === 'light' ? '#333' : 'white',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '20px',
+            }}
+        >
+            {/* Заголовок и переключение темы */}
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    width: '100%',
+                    maxWidth: '1200px',
+                    flexWrap: 'wrap',
+                }}
+            >
+                <Typography variant="h2" gutterBottom align="center">
                     Генерация билетов
                 </Typography>
                 <IconButton onClick={toggleTheme} color="inherit">
-                    {theme === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
+                    {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
                 </IconButton>
             </Box>
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+            {/* Кнопки генерации и сброса билета */}
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '20px' }}>
                 <Button variant="contained" color="primary" onClick={generateTicket}>
                     Сгенерировать билет
                 </Button>
+                <Button variant="outlined" color="secondary" onClick={resetTicket}>
+                    Сбросить билет
+                </Button>
             </Box>
 
-            {ticket.length > 0 && (
-                <Paper elevation={3} sx={{ padding: '20px', background: theme === 'light' ? '#ffffff' : '#333', borderRadius: '10px', color: theme === 'light' ? '#333' : 'white' }}>
+            {/* Отображение билета */}
+            {ticket.length > 0 ? (
+                <Paper
+                    elevation={3}
+                    sx={{
+                        padding: '20px',
+                        background: themeMode === 'light' ? '#ffffff' : '#333',
+                        borderRadius: '10px',
+                        color: themeMode === 'light' ? '#333' : 'white',
+                        width: '100%',
+                        maxWidth: '800px',
+                    }}
+                >
                     <Typography variant="h4" gutterBottom align="center">
                         Экзаменационный билет
                     </Typography>
@@ -71,19 +121,34 @@ const TicketGenerator = ({ cards, theme, toggleTheme }) => {
                                 </Typography>
                                 {section.cards.length > 0 ? (
                                     section.cards.map((card, index) => (
-                                        <Paper key={index} elevation={2} sx={{ padding: '15px', marginBottom: '10px', background: theme === 'light' ? '#ffffff' : '#444', color: theme === 'light' ? '#333' : 'white' }}>
+                                        <Paper
+                                            key={index}
+                                            elevation={2}
+                                            sx={{
+                                                padding: '15px',
+                                                marginBottom: '10px',
+                                                background: themeMode === 'light' ? '#ffffff' : '#444',
+                                                color: themeMode === 'light' ? '#333' : 'white',
+                                            }}
+                                        >
                                             <Typography variant="body1" sx={{ wordWrap: 'break-word' }}>
                                                 {card ? `${index + 1}. ${card.title}` : 'Нет доступных карточек'}
                                             </Typography>
                                             {card && (
-                                                <Button variant="outlined" color="primary" component={Link} to={`/card/${card.id}`}>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="primary"
+                                                    component={Link}
+                                                    to={`/card/${card.id}`}
+                                                    sx={{ marginTop: '10px' }}
+                                                >
                                                     Открыть карточку
                                                 </Button>
                                             )}
                                         </Paper>
                                     ))
                                 ) : (
-                                    <Typography variant="body2" sx={{ color: theme === 'light' ? '#999' : '#ccc' }}>
+                                    <Typography variant="body2" sx={{ color: themeMode === 'light' ? '#999' : '#ccc' }}>
                                         Нет доступных карточек для этой секции
                                     </Typography>
                                 )}
@@ -91,9 +156,12 @@ const TicketGenerator = ({ cards, theme, toggleTheme }) => {
                         ))}
                     </Grid>
                 </Paper>
+            ) : (
+                <Typography variant="body1">Нажмите кнопку, чтобы сгенерировать билет.</Typography>
             )}
         </Box>
     );
+
 };
 
 export default TicketGenerator;
