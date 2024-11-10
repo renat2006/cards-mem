@@ -31,8 +31,8 @@ const subjects = [
         dataFiles: ['all_1.json'],
     },
     {
-        name: 'Математика',
-        dataFiles: ['math_cards1.json', 'math_cards2.json'],
+        name: 'Матан',
+        dataFiles: ['all_maths_1.json'],
     },
     // Добавьте другие предметы здесь
 ];
@@ -451,8 +451,18 @@ const App = () => {
                         />
                         <Route
                             path="/generate-ticket"
-                            element={<TicketGenerator cards={cards} themeMode={themeMode} toggleTheme={toggleTheme} />}
+                            element={
+                                <TicketGenerator
+                                    cards={cards}
+                                    themeMode={themeMode}
+                                    toggleTheme={toggleTheme}
+                                    subjects={subjects}
+                                    selectedSubject={selectedSubject}
+                                    setSelectedSubject={setSelectedSubject}
+                                />
+                            }
                         />
+
                         <Route
                             path="/card/:id"
                             element={<CardDetail cards={cards} themeMode={themeMode} toggleTheme={toggleTheme} />}

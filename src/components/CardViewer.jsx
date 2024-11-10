@@ -1,6 +1,6 @@
 // src/components/CardViewer.jsx
 import React from 'react';
-import { Box, Typography, Button, Fade, Zoom } from '@mui/material';
+import { Box, Typography, Button, Fade, Zoom, Chip } from '@mui/material';
 import Latex from 'react-latex-next';
 import { Link } from 'react-router-dom';
 
@@ -43,17 +43,35 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                         padding: 2,
                     }}
                 >
-                    <Typography
-                        variant="h5"
-                        sx={{
-                            wordWrap: 'break-word',
-                            textAlign: 'center',
-                            fontSize: { xs: '1.2rem', sm: '1.5rem' },
-                            padding: '10px 0',
-                        }}
-                    >
-                        {card.title}
-                    </Typography>
+                    <Box sx={{ position: 'relative', width: '100%', textAlign: 'center' }}>
+                        {/* Плашка типа карточки */}
+                        <Chip
+                            label={card.type}
+                            sx={{
+                                position: 'absolute',
+                                top: { xs: 4, sm: 8 }, // Меньший отступ сверху на мобильных устройствах
+                                left: { xs: 4, sm: 8 }, // Меньший отступ слева на мобильных устройствах
+                                backgroundColor: themeMode === 'light' ? '#ffeb3b' : '#ffb300',
+                                color: themeMode === 'light' ? '#333' : '#000',
+                                fontWeight: 'bold',
+                                zIndex: 1,
+                                fontSize: { xs: '0.8rem', sm: '1rem' }, // Уменьшение размера текста на мобильных
+                                padding: { xs: '2px 6px', sm: '4px 8px' }, // Адаптивные отступы внутри плашки
+                            }}
+                        />
+                        <Typography
+                            variant="h5"
+                            sx={{
+                                wordWrap: 'break-word',
+                                textAlign: 'center',
+                                fontSize: { xs: '1.2rem', sm: '1.5rem' },
+                                padding: '10px 0',
+                                marginTop: { xs: '24px', sm: '0' }, // Отступ сверху для заголовка на мобильных
+                            }}
+                        >
+                            {card.title}
+                        </Typography>
+                    </Box>
                 </Box>
             </Zoom>
 
