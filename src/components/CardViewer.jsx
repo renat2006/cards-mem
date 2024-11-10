@@ -45,20 +45,7 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                 >
                     <Box sx={{ position: 'relative', width: '100%', textAlign: 'center' }}>
                         {/* Плашка типа карточки */}
-                        <Chip
-                            label={card.type}
-                            sx={{
-                                position: 'absolute',
-                                top: { xs: 4, sm: 8 }, // Меньший отступ сверху на мобильных устройствах
-                                left: { xs: 4, sm: 8 }, // Меньший отступ слева на мобильных устройствах
-                                backgroundColor: themeMode === 'light' ? '#ffeb3b' : '#ffb300',
-                                color: themeMode === 'light' ? '#333' : '#000',
-                                fontWeight: 'bold',
-                                zIndex: 1,
-                                fontSize: { xs: '0.8rem', sm: '1rem' }, // Уменьшение размера текста на мобильных
-                                padding: { xs: '2px 6px', sm: '4px 8px' }, // Адаптивные отступы внутри плашки
-                            }}
-                        />
+
                         <Typography
                             variant="h5"
                             sx={{
