@@ -24,7 +24,6 @@ const subjectStructures = {
         { title: 'Определения в кванторах', count: 1, type: 'Определение или формулировка в кванторах' },
         { title: 'Определения', count: 2, type: 'Определение' },
         { title: 'Формулировки теорем', count: 1, type: 'Формулировка' },
-
         { title: 'Доказательства', count: 2, type: 'Формулировка и доказательство' },
         { title: 'Теоретическая задача', count: 1, type: 'Задача' },
     ],
@@ -34,6 +33,14 @@ const TicketGenerator = ({ cards = [], themeMode, toggleTheme, subjects, selecte
     const [ticket, setTicket] = useState([]);
     const [customStructure, setCustomStructure] = useState([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Загрузка сохраненного билета из localStorage при загрузке компонента
+        const savedTicket = localStorage.getItem('examTicket');
+        if (savedTicket) {
+            setTicket(JSON.parse(savedTicket));
+        }
+    }, []);
 
     useEffect(() => {
         setCustomStructure(subjectStructures[selectedSubject] || []);

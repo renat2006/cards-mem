@@ -1,5 +1,5 @@
 // src/components/CardDetail.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
     Box,
@@ -7,18 +7,49 @@ import {
     IconButton,
     Paper,
     Breadcrumbs,
-    Button
+    Button,
 } from '@mui/material';
 import Latex from 'react-latex-next';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-const CardDetail = ({ cards, themeMode, toggleTheme }) => {
+const CardDetail = ({ themeMode, toggleTheme }) => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const card = cards.find((c) => c.id === parseInt(id, 10));
+    const [card, setCard] = useState(null);
+    const [notFound, setNotFound] = useState(false);
 
-    if (!card) {
+    useEffect(() => {
+        // Функция для загрузки JSON-файлов и поиска нужной карточки
+        const fetchCard = async () => {
+            try {
+                const fileNames = ['all_1.json', 'all_maths_1.json']; // Укажите имена всех файлов JSON, которые хотите проверить
+                let foundCard = null;
+
+                for (const fileName of fileNames) {
+                    const response = await fetch(`/data/${fileName}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        foundCard = data.find((c) => c.id === parseInt(id, 10));
+                        if (foundCard) break;
+                    }
+                }
+
+                if (foundCard) {
+                    setCard(foundCard);
+                } else {
+                    setNotFound(true);
+                }
+            } catch (error) {
+                console.error('Error loading card data:', error);
+                setNotFound(true);
+            }
+        };
+
+        fetchCard();
+    }, [id]);
+
+    if (notFound) {
         return (
             <Box
                 sx={{
@@ -45,6 +76,10 @@ const CardDetail = ({ cards, themeMode, toggleTheme }) => {
                 </Button>
             </Box>
         );
+    }
+
+    if (!card) {
+        return <Typography>Загрузка...</Typography>;
     }
 
     return (
@@ -144,7 +179,6 @@ const CardDetail = ({ cards, themeMode, toggleTheme }) => {
             </Paper>
         </Box>
     );
-
 };
 
 export default CardDetail;
