@@ -23,7 +23,7 @@ const CardDetail = ({ themeMode, toggleTheme }) => {
         // Функция для загрузки JSON-файлов и поиска нужной карточки
         const fetchCard = async () => {
             try {
-                const fileNames = ['all_1.json', 'all_maths_1.json']; // Укажите имена всех файлов JSON, которые хотите проверить
+                const fileNames = ['all_1.json', 'all_maths_1.json', 'all_FBA_1.json']; // Укажите имена всех файлов JSON, которые хотите проверить
                 let foundCard = null;
 
                 for (const fileName of fileNames) {

@@ -34,6 +34,10 @@ const subjects = [
         name: 'Матан',
         dataFiles: ['all_maths_1.json'],
     },
+    {
+        name:"ОБА",
+        dataFiles: ['all_FBA_1.json']
+    }
     // Добавьте другие предметы здесь
 ];
 
