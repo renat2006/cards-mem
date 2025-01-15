@@ -314,7 +314,9 @@ const App = () => {
                                             Случайная карточка
                                         </Button>
                                     </Box>
-
+                                    <Typography variant="h6" gutterBottom align="center" sx={{ flexGrow: 1 }}>
+                                       P. S. Нажми на карточку, чтобы узнать верный ответ :)
+                                    </Typography>
                                     {/* Отображение карточки */}
                                     <CardViewer
                                         card={filteredCards[currentCardIndex]}
