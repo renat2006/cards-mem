@@ -23,7 +23,7 @@ const CardDetail = ({ themeMode, toggleTheme }) => {
         // Функция для загрузки JSON-файлов и поиска нужной карточки
         const fetchCard = async () => {
             try {
-                const fileNames = ['all_1.json', 'all_maths_1.json', 'all_FBA_1.json']; // Укажите имена всех файлов JSON, которые хотите проверить
+                const fileNames = ['all_1.json', 'all_maths_1.json', 'all_FBA_1.json', 'all_math_exam.json']; // Укажите имена всех файлов JSON, которые хотите проверить
                 let foundCard = null;
 
                 for (const fileName of fileNames) {
@@ -143,7 +143,7 @@ const CardDetail = ({ themeMode, toggleTheme }) => {
                 }}
             >
                 <Typography variant="h3" gutterBottom>
-                    {card.title}
+                    <Latex> {card.title}</Latex>
                 </Typography>
                 <IconButton onClick={toggleTheme} color="inherit">
                     {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
@@ -159,10 +159,14 @@ const CardDetail = ({ themeMode, toggleTheme }) => {
                     borderRadius: '10px',
                     color: themeMode === 'light' ? '#333' : 'white',
                     width: '100%',
-                    maxWidth: '800px',
+                    maxWidth: '1200px',
+                    textAlign: 'center',
                 }}
             >
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{ textAlign: 'center',  whiteSpace: 'pre-wrap',
+
+
+                    overflowWrap: 'break-word', }}>
                     <Latex>{card.content}</Latex>
                 </Typography>
                 {card.note && (
@@ -172,7 +176,7 @@ const CardDetail = ({ themeMode, toggleTheme }) => {
                 )}
                 {card.example && (
                     <Typography variant="body2" sx={{ marginTop: '10px' }}>
-                        <strong>Пример:</strong> {card.example.description}{' '}
+                        <strong>{<Latex>{card.example.description}{' '}</Latex>}</strong>
                         <Latex>{card.example.value}</Latex>
                     </Typography>
                 )}

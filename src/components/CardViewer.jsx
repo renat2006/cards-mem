@@ -3,7 +3,20 @@ import React from 'react';
 import { Box, Typography, Button, Fade, Zoom, Chip } from '@mui/material';
 import Latex from 'react-latex-next';
 import { Link } from 'react-router-dom';
+const parseBoldText = (text) => {
 
+    const parts = text.split(/(\*\*.*?\*\*)/);
+    return parts.map((part, index) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+            return (
+                <strong key={index}>
+                    {part.slice(2, -2)} {/* Убираем ** */}
+                </strong>
+            );
+        }
+        return part;
+    });
+};
 const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
     if (!card) return null;
 
@@ -20,7 +33,8 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                 cursor: 'pointer',
                 margin: '0 auto',
                 position: 'relative',
-                height: { xs: '400px', sm: '400px' },
+                height: { xs: '450px', sm: '450px' },
+
                 minHeight: '300px',
                 overflow: 'hidden',
                 borderRadius: '20px',
@@ -44,7 +58,7 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                     }}
                 >
                     <Box sx={{ position: 'relative', width: '100%', textAlign: 'center' }}>
-                        {/* Плашка типа карточки */}
+
 
                         <Typography
                             variant="h5"
@@ -53,16 +67,16 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                                 textAlign: 'center',
                                 fontSize: { xs: '1.2rem', sm: '1.5rem' },
                                 padding: '10px 0',
-                                marginTop: { xs: '24px', sm: '0' }, // Отступ сверху для заголовка на мобильных
+                                marginTop: { xs: '24px', sm: '0' },
                             }}
                         >
-                            {card.title}
+                            <Latex>{card.title}</Latex>
                         </Typography>
                     </Box>
                 </Box>
             </Zoom>
 
-            {/* Задняя сторона карточки с эффектом Fade */}
+
             <Fade in={flipped} timeout={500}>
                 <Box
                     sx={{
@@ -93,10 +107,11 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                         <Typography
                             variant="body1"
                             sx={{
-                                mb: 1,
+
+                                mt:3,
                                 whiteSpace: 'pre-wrap',
                                 textAlign: 'center',
-                                fontSize: { xs: '1rem', sm: '1.2rem' },
+                                fontSize: { xs: '0.8rem', sm: '1rem' },
                                 overflowWrap: 'break-word',
                             }}
                         >
@@ -120,10 +135,10 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                                 sx={{
                                     marginTop: '10px',
                                     textAlign: 'center',
-                                    fontSize: { xs: '0.9rem', sm: '1rem' },
+                                    fontSize: {xs: '0.9rem', sm: '1rem'},
                                 }}
                             >
-                                <strong>Пример:</strong> {card.example.description}{' '}
+                                <strong>{<Latex>{card.example.description}{' '}</Latex>}</strong>
                                 <Latex>{card.example.value}</Latex>
                             </Typography>
                         )}
@@ -134,7 +149,7 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                         variant="outlined"
                         color="primary"
                         sx={{ marginTop: 'auto' }}
-                        onClick={(e) => e.stopPropagation()} // Предотвращает переключение при клике на кнопку
+                        onClick={(e) => e.stopPropagation()}
                     >
                         Подробнее
                     </Button>

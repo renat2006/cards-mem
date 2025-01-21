@@ -13,6 +13,7 @@ import {
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { Link, useNavigate } from 'react-router-dom';
+import Latex from "react-latex-next";
 
 const subjectStructures = {
     'Линейная алгебра': [
@@ -26,6 +27,13 @@ const subjectStructures = {
         { title: 'Формулировки теорем', count: 1, type: 'Формулировка' },
         { title: 'Доказательства', count: 2, type: 'Формулировка и доказательство' },
         { title: 'Теоретическая задача', count: 1, type: 'Задача' },
+    ],
+    'Матан Экзамен': [
+
+        { title: 'Определения', count: 3, type: 'Определение' },
+        { title: 'Формулировки', count: 4, type: 'Формулировка' },
+        { title: 'Доказательства', count: 3, type: 'Формулировка и доказательство' },
+
     ],
 };
 
@@ -49,12 +57,26 @@ const TicketGenerator = ({ cards = [], themeMode, toggleTheme, subjects, selecte
     const generateTicket = () => {
         if (!cards.length || !customStructure.length) return;
 
+        const usedTitles = new Set(); // Храним уже использованные заголовки
+
         const generatedTicket = customStructure.map((section) => {
             const filteredCards = cards.filter((card) => card.type === section.type);
-            const selectedCards = Array.from({ length: section.count }, () => {
+
+            // Выбираем уникальные карточки
+            const selectedCards = [];
+            while (selectedCards.length < section.count && filteredCards.length > 0) {
                 const randomIndex = Math.floor(Math.random() * filteredCards.length);
-                return filteredCards[randomIndex];
-            });
+                const selectedCard = filteredCards[randomIndex];
+
+                if (!usedTitles.has(selectedCard.title)) {
+                    selectedCards.push(selectedCard);
+                    usedTitles.add(selectedCard.title); // Добавляем заголовок в список использованных
+                }
+
+                // Убираем выбранную карточку из доступных
+                filteredCards.splice(randomIndex, 1);
+            }
+
             return { ...section, cards: selectedCards.filter(Boolean) };
         });
 
@@ -193,7 +215,7 @@ const TicketGenerator = ({ cards = [], themeMode, toggleTheme, subjects, selecte
                         {ticket.map((section, sectionIndex) => (
                             <Grid item xs={12} key={sectionIndex}>
                                 <Typography variant="h5" gutterBottom>
-                                    {section.title}
+                                  {section.title}
                                 </Typography>
                                 {section.cards.length > 0 ? (
                                     section.cards.map((card, index) => (
@@ -208,7 +230,7 @@ const TicketGenerator = ({ cards = [], themeMode, toggleTheme, subjects, selecte
                                             }}
                                         >
                                             <Typography variant="body1" sx={{ wordWrap: 'break-word' }}>
-                                                {card ? `${index + 1}. ${card.title}` : 'Нет доступных карточек'}
+                                                {card ? ( <Latex>{card.title}</Latex>) : 'Нет доступных карточек'}
                                             </Typography>
                                             {card && (
                                                 <Button
