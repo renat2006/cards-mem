@@ -118,7 +118,7 @@ const CardDetail = ({ themeMode, toggleTheme }) => {
                 >
                     Сгенерированный билет
                 </Link>
-                <Typography color="textPrimary">{card.title}</Typography>
+                <Typography color="textPrimary"><Latex>{card.title}</Latex></Typography>
             </Breadcrumbs>
 
             {/* Кнопка "Назад к билету" */}
