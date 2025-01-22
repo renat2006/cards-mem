@@ -1,22 +1,9 @@
 // src/components/CardViewer.jsx
 import React from 'react';
-import { Box, Typography, Button, Fade, Zoom, Chip } from '@mui/material';
+import { Box, Typography, Button, Fade, Zoom } from '@mui/material';
 import Latex from 'react-latex-next';
 import { Link } from 'react-router-dom';
-const parseBoldText = (text) => {
 
-    const parts = text.split(/(\*\*.*?\*\*)/);
-    return parts.map((part, index) => {
-        if (part.startsWith('**') && part.endsWith('**')) {
-            return (
-                <strong key={index}>
-                    {part.slice(2, -2)} {/* Убираем ** */}
-                </strong>
-            );
-        }
-        return part;
-    });
-};
 const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
     if (!card) return null;
 
@@ -34,13 +21,23 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                 margin: '0 auto',
                 position: 'relative',
                 height: { xs: '450px', sm: '450px' },
-
                 minHeight: '300px',
-                overflow: 'hidden',
+                overflow: 'auto',
                 borderRadius: '20px',
                 boxShadow: 3,
                 backgroundColor: themeMode === 'light' ? '#f5f5f5' : '#333333',
                 transition: 'background-color 0.3s, color 0.3s',
+                scrollbarWidth: 'thin',
+                '&::-webkit-scrollbar': {
+                    width: '8px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: themeMode === 'light' ? '#ccc' : '#555',
+                    borderRadius: '4px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: themeMode === 'light' ? '#bbb' : '#666',
+                },
             }}
         >
             {/* Передняя сторона карточки с эффектом Zoom */}
@@ -58,8 +55,6 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                     }}
                 >
                     <Box sx={{ position: 'relative', width: '100%', textAlign: 'center' }}>
-
-
                         <Typography
                             variant="h5"
                             sx={{
@@ -67,7 +62,7 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                                 textAlign: 'center',
                                 fontSize: { xs: '1.2rem', sm: '1.5rem' },
                                 padding: '10px 0',
-                                marginTop: { xs: '24px', sm: '0' },
+                                margin: { xs: '20px', sm: '10px' },
                             }}
                         >
                             <Latex>{card.title}</Latex>
@@ -75,7 +70,6 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                     </Box>
                 </Box>
             </Zoom>
-
 
             <Fade in={flipped} timeout={500}>
                 <Box
@@ -89,8 +83,6 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                         alignItems: 'center',
                         color: themeMode === 'light' ? '#333' : '#ffffff',
                         padding: 2,
-                        overflowY: 'auto',
-                        overflowX: 'hidden',
                     }}
                 >
                     <Box
@@ -98,25 +90,25 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            justifyContent: 'center',
-                            maxHeight: 'calc(100% - 50px)',
-                            overflowY: 'auto',
+                            justifyContent: 'flex-start',
                             paddingTop: 2,
+                            width: '100%',
                         }}
                     >
                         <Typography
                             variant="body1"
                             sx={{
-
-                                mt:3,
+                                mt: 3,
                                 whiteSpace: 'pre-wrap',
                                 textAlign: 'center',
                                 fontSize: { xs: '0.8rem', sm: '1rem' },
                                 overflowWrap: 'break-word',
+                                position: 'relative',
                             }}
                         >
                             <Latex>{card.content}</Latex>
                         </Typography>
+
                         {card.note && (
                             <Typography
                                 variant="body2"
@@ -126,16 +118,17 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                                     fontSize: { xs: '0.9rem', sm: '1rem' },
                                 }}
                             >
-                                <strong>Примечание:</strong> {card.note}
+                                <strong>Примечание:</strong> <Latex>{card.note}</Latex>
                             </Typography>
                         )}
+
                         {card.example && (
                             <Typography
                                 variant="body2"
                                 sx={{
                                     marginTop: '10px',
                                     textAlign: 'center',
-                                    fontSize: {xs: '0.9rem', sm: '1rem'},
+                                    fontSize: { xs: '0.9rem', sm: '1rem' },
                                 }}
                             >
                                 <strong>{<Latex>{card.example.description}{' '}</Latex>}</strong>
@@ -143,12 +136,13 @@ const CardViewer = ({ card, flipped, setFlipped, themeMode }) => {
                             </Typography>
                         )}
                     </Box>
+
                     <Button
                         component={Link}
                         to={`/card/${card.id}`}
                         variant="outlined"
                         color="primary"
-                        sx={{ marginTop: 'auto' }}
+                        sx={{ margin: '10px' }}
                         onClick={(e) => e.stopPropagation()}
                     >
                         Подробнее
